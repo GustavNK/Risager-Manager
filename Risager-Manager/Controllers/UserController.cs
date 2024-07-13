@@ -19,6 +19,5 @@ namespace RisagerManagerServer.Controllers
         {
             return await _context.User.FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
-
     }
 }

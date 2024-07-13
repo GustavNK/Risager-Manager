@@ -11,12 +11,5 @@ export class UserComponent {
   public user: User | undefined = undefined;
   constructor(private client: ApiClient) {
     this.client = client;
-    this.getUser().subscribe((user) => {
-      this.user = user;
-    });
-  }
-
-  getUser(): Observable<User> {
-    return this.client.getUser('1');
   }
 }

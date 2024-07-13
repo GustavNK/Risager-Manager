@@ -1,8 +1,8 @@
-﻿namespace RisagerManagerServer.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace RisagerManagerServer.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public string Id { get; set; }
-        public string Name {  get; set; }
     }
 }

@@ -1,5 +1,6 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using RisagerManagerServer.Extensions;
 using RisagerManagerServer.Models;
 using RisagerManagerServer.Services;
 
@@ -24,6 +25,14 @@ builder.Services.AddCors(options =>
         });
 });
 
+// Auth
+builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
+    .AddIdentityCookies();
+builder.Services.AddAuthorizationBuilder();
+builder.Services.AddIdentityCore<User>()
+    .AddEntityFrameworkStores<RisagerContext>()
+    .AddApiEndpoints();
+
 builder.Services.AddScoped<BookingService>();
 
 var app = builder.Build();
@@ -37,10 +46,12 @@ if (app.Environment.IsDevelopment())
         options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
     });
 }
+
 app.UseCors();
 app.UseHttpsRedirection();
 app.UseAuthorization();
 app.MapControllers();
+app.MapGroup("auth").MapCustomIdentityApi<User>();
 
 // Seed Db if empty
 using (var scope = app.Services.CreateScope())
