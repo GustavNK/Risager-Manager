@@ -102,7 +102,7 @@
             }
           },
           {
-            "name": "userId",
+            "name": "houseId",
             "in": "query",
             "schema": {
               "type": "integer",
@@ -149,6 +149,84 @@
         "responses": {
           "200": {
             "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/House": {
+      "get": {
+        "tags": [
+          "House"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/House"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/House"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/House"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/House/{id}": {
+      "get": {
+        "tags": [
+          "House"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/House"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/House"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/House"
+                }
+              }
+            }
           }
         }
       }
@@ -711,6 +789,9 @@
           },
           "bookingUser": {
             "$ref": "#/components/schemas/User"
+          },
+          "house": {
+            "$ref": "#/components/schemas/House"
           }
         },
         "additionalProperties": false
@@ -723,6 +804,39 @@
         "properties": {
           "email": {
             "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "House": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "imageSrc": {
+            "type": "string",
+            "nullable": true
+          },
+          "numberOfBeds": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "bookings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Booking"
+            },
             "nullable": true
           }
         },

@@ -7,3 +7,17 @@
   gap: 1em;
 
 }
+
+.booking-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1em;
+  align-items: center;
+
+}
+
+.house-picture{
+  width: 10em;
+  height: 10em;
+  object-fit: cover;
+}

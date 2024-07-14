@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RisagerManagerServer.Models;
 
 namespace RisagerManagerServer.Controllers
@@ -17,9 +18,14 @@ namespace RisagerManagerServer.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get() 
+        public async Task<IEnumerable<House>> Get()
         {
-            return null;
+            return await _context.House.ToListAsync();
+        }
+        [HttpGet("{id}")]
+        public async Task<House?> Get(int id)
+        {
+            return await _context.House.FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
     }
 }

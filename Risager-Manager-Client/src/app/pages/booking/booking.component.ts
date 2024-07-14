@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BookingService } from './services/booking.service';
-import { Booking, User } from 'src/app/services/ApiClient';
+import { Booking, House, User } from 'src/app/services/ApiClient';
 import { Observable } from 'rxjs';
 import { AuthenticationService } from 'src/app/shared/services/authentication/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HouseService } from 'src/app/shared/services/house/house.service';
 
 @Component({
   selector: 'app-booking',
@@ -15,15 +16,20 @@ export class BookingComponent {
   range: FormGroup<{
     start: FormControl<Date | null>;
     end: FormControl<Date | null>;
+    house: FormControl<House | null>;
   }>;
   currentBookings: Booking[] = [];
   currentBookings$: Observable<Booking[]>;
   currentUser$: Observable<User>;
   currentUser: User | undefined;
+  houseList$: Observable<House[]>;
+  houseList: House[] = [];
+  housePicture: string | undefined = undefined;
 
   public constructor(
     private bookingService: BookingService,
     private authenticationService: AuthenticationService,
+    private houseService: HouseService,
     private snackBar: MatSnackBar
   ) {
     const dayInMilliseconds = 1000 * 60 * 60 * 24;
@@ -32,11 +38,21 @@ export class BookingComponent {
       end: new FormControl<Date | null>(
         new Date(Date.now() + dayInMilliseconds * 7)
       ),
+      house: new FormControl<House | null>(null),
     });
 
     this.currentBookings$ = this.bookingService.getCurrentBookings();
     this.currentUser$ = this.authenticationService.currentUser();
+    this.houseList$ = this.houseService.getAllHouses();
+
+    this.range.valueChanges.subscribe((x) => {
+      if (x.house) {
+        console.log(x.house);
+        this.housePicture = x.house.imageSrc;
+      }
+    });
   }
+
   ngOnInit() {
     this.currentBookings$.subscribe((dates) => {
       console.log(dates);
@@ -44,6 +60,10 @@ export class BookingComponent {
     });
     this.currentUser$.subscribe((x) => {
       this.currentUser = x;
+    });
+    this.houseList$.subscribe((x) => {
+      this.houseList = x;
+      this.range.controls.house.setValue(x[0]);
     });
   }
 
@@ -59,7 +79,11 @@ export class BookingComponent {
   submitBooking(): void {
     if (!this.range.value.start || !this.range.value.end) return;
     this.bookingService
-      .createNewBooking(this.range.value.start, this.range.value.end, 1)
+      .createNewBooking(
+        this.range.value.start,
+        this.range.value.end,
+        this.range.value.house?.id ?? 0
+      )
       .subscribe({
         next: () => {
           console.log(

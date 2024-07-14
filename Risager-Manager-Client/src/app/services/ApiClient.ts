@@ -134,10 +134,10 @@ export class ApiClient {
     /**
      * @param arrival (optional) 
      * @param departure (optional) 
-     * @param userId (optional) 
+     * @param houseId (optional) 
      * @return OK
      */
-    bookingPOST(arrival: string | undefined, departure: string | undefined, userId: number | undefined): Observable<boolean> {
+    bookingPOST(arrival: string | undefined, departure: string | undefined, houseId: number | undefined): Observable<boolean> {
         let url_ = this.baseUrl + "/api/Booking?";
         if (arrival === null)
             throw new Error("The parameter 'arrival' cannot be null.");
@@ -147,10 +147,10 @@ export class ApiClient {
             throw new Error("The parameter 'departure' cannot be null.");
         else if (departure !== undefined)
             url_ += "departure=" + encodeURIComponent("" + departure) + "&";
-        if (userId === null)
-            throw new Error("The parameter 'userId' cannot be null.");
-        else if (userId !== undefined)
-            url_ += "userId=" + encodeURIComponent("" + userId) + "&";
+        if (houseId === null)
+            throw new Error("The parameter 'houseId' cannot be null.");
+        else if (houseId !== undefined)
+            url_ += "houseId=" + encodeURIComponent("" + houseId) + "&";
         url_ = url_.replace(/[?&]$/, "");
 
         let options_ : any = {
@@ -241,6 +241,111 @@ export class ApiClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    houseAll(): Observable<House[]> {
+        let url_ = this.baseUrl + "/api/House";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processHouseAll(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processHouseAll(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<House[]>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<House[]>;
+        }));
+    }
+
+    protected processHouseAll(response: HttpResponseBase): Observable<House[]> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as House[];
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    house(id: number): Observable<House> {
+        let url_ = this.baseUrl + "/api/House/{id}";
+        if (id === undefined || id === null)
+            throw new Error("The parameter 'id' must be defined.");
+        url_ = url_.replace("{id}", encodeURIComponent("" + id));
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processHouse(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processHouse(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<House>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<House>;
+        }));
+    }
+
+    protected processHouse(response: HttpResponseBase): Observable<House> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as House;
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -1178,10 +1283,20 @@ export interface Booking {
     arrival: Date;
     departure: Date;
     bookingUser: User;
+    house: House;
 }
 
 export interface ForgotPasswordRequest {
     email: string | undefined;
+}
+
+export interface House {
+    id: number;
+    name: string | undefined;
+    description: string | undefined;
+    imageSrc: string | undefined;
+    numberOfBeds: number;
+    bookings: Booking[] | undefined;
 }
 
 export interface HttpValidationProblemDetails {

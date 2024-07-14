@@ -7,26 +7,15 @@ public static class DbInitializer
     {
         context.Database.EnsureCreated();
 
-        //if (!context.User.Any())
-        //{
-        //    var users = new User[]
-        //    {
-        //    new User{Id="1", Name="Gustav"},
-        //    new User{Id="2", Name="Elisabeth"}
-        //    };
-        //    await context.User.AddRangeAsync(users);
-        //    context.SaveChanges();
-        //}
-        //if (!context.Booking.Any())
-        //{
-        //    var bookings = new Booking[]
-        //    {
-        //    new Booking{Arrival=new DateOnly(2024,1,1), Departure=new DateOnly(2024,1,10), BookingUser=context.User.First()},
-        //    new Booking{Arrival=new DateOnly(2024,1,20), Departure=new DateOnly(2024,1,26), BookingUser=context.User.First()},
-        //    };
-        //    await context.Booking.AddRangeAsync(bookings);
-        //    context.SaveChanges();
-        //}
+        if (!context.House.Any())
+        {
+            var houses = new House[]
+            {
+                new House{Id=1, Name="Røde Hus", Description="Huset ved vejen", NumberOfBeds=12, ImageSrc="https://www.sommerhus-siden.dk/Media/Sommerhussiden.dk/_Profiles/8ce764d7/ab660db4/Sommerhus_Sverige_172-68324.jpg?v=636069273698886393"},
+                new House{Id=2, Name="Søhuset", Description="Huset ved søen", NumberOfBeds=7, ImageSrc="https://sorensenogson.dk/wp-content/uploads/2018/08/IMG_0722-2-e1568269983900.jpg"},
+            };
+            await context.House.AddRangeAsync(houses);
+            context.SaveChanges();
+        }
     }
 }
-

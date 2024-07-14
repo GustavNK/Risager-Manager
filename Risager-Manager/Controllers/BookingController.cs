@@ -34,11 +34,11 @@ namespace RisagerManagerServer.Controllers
         [HttpGet()]
         public async Task<IEnumerable<Booking>> GetAllBookings()
         {
-            return await _context.Booking.Include(x => x.BookingUser).OrderBy(x => x.Arrival).ToListAsync();
+            return await _context.Booking.Include(x => x.BookingUser).Include(x => x.House).OrderBy(x => x.Arrival).ToListAsync();
         }
 
         [HttpPost]
-        public async Task<bool> Post(string arrival, string departure, int userId)
+        public async Task<bool> Post(string arrival, string departure, int houseId)
         {
             var arrivaltDate = DateOnly.Parse(arrival.Substring(0,10));
             var departureDate = DateOnly.Parse(departure.Substring(0,10));
@@ -49,7 +49,8 @@ namespace RisagerManagerServer.Controllers
             {
                 Arrival = arrivaltDate,
                 Departure = departureDate,
-                BookingUser = await _userManager.GetUserAsync(User)
+                BookingUser = await _userManager.GetUserAsync(User),
+                House = await _context.House.FirstOrDefaultAsync(x => x.Id.Equals(houseId))
         });
             await _context.SaveChangesAsync();
 
