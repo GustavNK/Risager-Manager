@@ -24,6 +24,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
+import { BookingManagementComponent } from './pages/booking-management/booking-management.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { MatSelectModule } from '@angular/material/select';
     LoginComponent,
     UserManagementComponent,
     HomeComponent,
+    BookingManagementComponent,
   ],
   imports: [
     BrowserModule,
