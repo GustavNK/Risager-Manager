@@ -56,11 +56,11 @@ namespace RisagerManagerServer.Controllers
             return true;
         }
         [HttpDelete]
-        public async Task Delete(string id)
+        public async Task Delete(string bookingId)
         {
-            //var bookingToDelete = await _context.Booking.FirstOrDefaultAsync(x => x.Id.Equals(id));
-            //_context.Booking.Remove(bookingToDelete);
-            //await _context.SaveChangesAsync();
+            var bookingToDelete = await _context.Booking.FirstOrDefaultAsync(x => x.Id.Equals(int.Parse(bookingId)));
+            _context.Booking.Remove(bookingToDelete);
+            await _context.SaveChangesAsync();
         }
     }
 }

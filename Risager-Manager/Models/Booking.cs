@@ -9,5 +9,6 @@ namespace RisagerManagerServer.Models
         public DateOnly Arrival {  get; set; }
         public DateOnly Departure { get; set; }
         public User BookingUser { get; set; }
+        public House House { get; set; }
     }
 }

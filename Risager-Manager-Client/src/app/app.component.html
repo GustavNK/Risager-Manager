@@ -333,16 +333,9 @@
     <a
       class="menu-button"
       mat-raised-button
-      routerLink="/user"
-      routerLinkActive="active"
-      >Login</a
-    >
-    <a
-      class="menu-button"
-      mat-raised-button
       routerLink="/register"
       routerLinkActive="active"
-      >Register new user</a
+      >User Management</a
     >
   </div>
   <div class="spacer"></div>
@@ -351,15 +344,19 @@
     <div *ngIf="user as value; else elseBlock">
       Logged in: <b>{{ user?.userName }}</b>
     </div>
-    <ng-template #elseBlock>Not user logged in</ng-template>
+    <ng-template #elseBlock></ng-template>
     <button
       mat-raised-button
       color="warn"
-      *ngIf="user as value"
+      *ngIf="user as value; else loginElseBlock"
       (click)="logout()"
     >
       Logout
     </button>
+    <ng-template #loginElseBlock>
+      <button mat-raised-button routerLink="/login">Login</button>
+    </ng-template>
+    <ng-template>Not user logged in</ng-template>
   </div>
 </div>
 

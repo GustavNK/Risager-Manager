@@ -1,3 +1,4 @@
+<h1>Register new User</h1>
 <form class="content">
   <mat-form-field>
     <mat-label>Username</mat-label>
@@ -32,7 +33,7 @@
     Login
   </button>
 </form>
-
+<h1>All Users</h1>
 <table
   style="margin-top: 1em"
   mat-table
@@ -49,6 +50,22 @@
     <td mat-cell *matCellDef="let element">{{ element.email }}</td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="['Username', 'Email']"></tr>
-  <tr mat-row *matRowDef="let row; columns: ['Username', 'Email']"></tr>
+  <ng-container matColumnDef="delete">
+    <th mat-header-cell *matHeaderCellDef>Remove?</th>
+    <td mat-cell *matCellDef="let element">
+      <button
+        mat-icon-button
+        aria-label="Delete"
+        (click)="deleteUser(element.id)"
+      >
+        <mat-icon style="color: red">close</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="['Username', 'Email', 'delete']"></tr>
+  <tr
+    mat-row
+    *matRowDef="let row; columns: ['Username', 'Email', 'delete']"
+  ></tr>
 </table>

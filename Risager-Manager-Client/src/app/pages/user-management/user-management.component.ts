@@ -7,10 +7,10 @@ import { User } from 'src/app/services/ApiClient';
 
 @Component({
   selector: 'app-register-user',
-  templateUrl: './register-user.component.html',
-  styleUrls: ['./register-user.component.scss'],
+  templateUrl: './user-management.component.html',
+  styleUrls: ['./user-management.component.scss'],
 })
-export class RegisterUserComponent {
+export class UserManagementComponent {
   allUsers$: Observable<User[]>;
   allUsers: User[] = [];
 
@@ -41,6 +41,12 @@ export class RegisterUserComponent {
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action);
   }
+  updateUserList() {
+    this.allUsers$ = this.authenticationService.getAllUsers();
+    this.allUsers$.subscribe((x) => {
+      this.allUsers = x;
+    });
+  }
 
   submit() {
     console.log(this.registerFormGroup.value);
@@ -57,6 +63,18 @@ export class RegisterUserComponent {
         switchMap(async () =>
           this.openSnackBar('User has been created', 'close')
         )
+      )
+      .subscribe();
+  }
+  deleteUser(id: string) {
+    this.authenticationService
+      .deleteUser(id)
+      .pipe(
+        switchMap(async () => {
+          this.updateUserList();
+
+          this.openSnackBar('User has been deleted', 'close');
+        })
       )
       .subscribe();
   }

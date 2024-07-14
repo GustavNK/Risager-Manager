@@ -139,7 +139,7 @@
         ],
         "parameters": [
           {
-            "name": "id",
+            "name": "bookingId",
             "in": "query",
             "schema": {
               "type": "string"
@@ -641,6 +641,27 @@
           }
         }
       }
+    },
+    "/api/User/DeleteUser": {
+      "delete": {
+        "tags": [
+          "User"
+        ],
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -987,6 +1008,13 @@
           "accessFailedCount": {
             "type": "integer",
             "format": "int32"
+          },
+          "bookings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Booking"
+            },
+            "nullable": true
           }
         },
         "additionalProperties": false

@@ -39,6 +39,7 @@ export class BookingComponent {
   }
   ngOnInit() {
     this.currentBookings$.subscribe((dates) => {
+      console.log(dates);
       this.currentBookings = dates;
     });
     this.currentUser$.subscribe((x) => {
@@ -80,21 +81,25 @@ export class BookingComponent {
       });
   }
 
-  delteBooking(booking: Booking | undefined): void {
-    // this.bookingService.deleteBooking(booking.id).subscribe({
-    //   next: () => {
-    //     console.log('Booking deleted', booking);
-    //     this.openSnackBar('Booking was deleted!', 'close');
-    //     this.currentBookings$ = this.bookingService.getCurrentBookings();
-    //     this.currentBookings$.subscribe(
-    //       (dates) => (this.currentBookings = dates)
-    //     );
-    //   },
-    //   error: () => {
-    //     this.openSnackBar('Booking deletion failed', 'close');
-    //   },
-    //   complete: () => {},
-    // });
+  delteBooking(bookingId: string | undefined): void {
+    if (!bookingId) {
+      this.openSnackBar('Booking deletion failed', 'close');
+      return;
+    }
+    this.bookingService.deleteBooking(bookingId).subscribe({
+      next: () => {
+        console.log('Booking deleted', bookingId);
+        this.openSnackBar('Booking was deleted!', 'close');
+        this.currentBookings$ = this.bookingService.getCurrentBookings();
+        this.currentBookings$.subscribe(
+          (dates) => (this.currentBookings = dates)
+        );
+      },
+      error: () => {
+        this.openSnackBar('Booking deletion failed', 'close');
+      },
+      complete: () => {},
+    });
   }
 
   openSnackBar(message: string, action: string) {

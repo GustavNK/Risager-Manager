@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 using RisagerManagerServer.Extensions;
 using RisagerManagerServer.Models;
 using RisagerManagerServer.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+   x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -22,6 +24,7 @@ builder.Services.AddCors(options =>
         {
             policy.SetIsOriginAllowed(origin => new Uri(origin).Host == "localhost");
             policy.AllowAnyHeader();
+            policy.AllowAnyMethod();
             policy.AllowCredentials();
         });
 });

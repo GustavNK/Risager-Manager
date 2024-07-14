@@ -48,4 +48,8 @@ export class AuthenticationService {
   getAllUsers() {
     return this.client.getAllUser();
   }
+
+  deleteUser(userId: string) {
+    return this.client.deleteUser(userId);
+  }
 }

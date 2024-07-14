@@ -13,11 +13,11 @@ import { JsonPipe } from '@angular/common';
 import { MatNativeDateModule } from '@angular/material/core';
 import { LOCALE_ID } from '@angular/core';
 import { BookingComponent } from './pages/booking/booking.component';
-import { UserComponent } from './pages/user/user.component';
+import { LoginComponent } from './pages/login/login.component';
 import { API_BASE_URL, ApiClient } from './services/ApiClient';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
-import { RegisterUserComponent } from './pages/register-user/register-user.component';
+import { UserManagementComponent } from './pages/user-management/user-management.component';
 import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HomeComponent } from './pages/home/home.component';
@@ -28,8 +28,8 @@ import { MatCardModule } from '@angular/material/card';
   declarations: [
     AppComponent,
     BookingComponent,
-    UserComponent,
-    RegisterUserComponent,
+    LoginComponent,
+    UserManagementComponent,
     HomeComponent,
   ],
   imports: [

@@ -10,10 +10,10 @@ import { AuthenticationService } from 'src/app/shared/services/authentication/au
 
 @Component({
   selector: 'app-user',
-  templateUrl: './user.component.html',
-  styleUrls: ['./user.component.scss'],
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss'],
 })
-export class UserComponent {
+export class LoginComponent {
   public user: User | undefined = undefined;
   constructor(private authenticationService: AuthenticationService) {}
   loginFormGroup = new FormGroup({
