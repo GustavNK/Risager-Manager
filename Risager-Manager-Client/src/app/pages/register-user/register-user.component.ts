@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthenticationService } from 'src/app/shared/services/authentication/authentication.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { switchMap } from 'rxjs';
+import { Observable, switchMap } from 'rxjs';
+import { User } from 'src/app/services/ApiClient';
 
 @Component({
   selector: 'app-register-user',
@@ -10,10 +11,21 @@ import { switchMap } from 'rxjs';
   styleUrls: ['./register-user.component.scss'],
 })
 export class RegisterUserComponent {
+  allUsers$: Observable<User[]>;
+  allUsers: User[] = [];
+
   constructor(
     private authenticationService: AuthenticationService,
     private snackBar: MatSnackBar
-  ) {}
+  ) {
+    this.allUsers$ = this.authenticationService.getAllUsers();
+  }
+
+  ngOnInit() {
+    this.allUsers$.subscribe((x) => {
+      this.allUsers = x;
+    });
+  }
   registerFormGroup = new FormGroup({
     username: new FormControl('Gustav', [Validators.required]),
     email: new FormControl('test@test.com', [

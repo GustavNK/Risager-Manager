@@ -44,4 +44,8 @@ export class AuthenticationService {
       .pipe(switchMap(async () => window.location.reload()))
       .subscribe((x) => console.log(x));
   }
+
+  getAllUsers() {
+    return this.client.getAllUser();
+  }
 }

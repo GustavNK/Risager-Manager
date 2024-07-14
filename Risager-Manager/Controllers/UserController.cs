@@ -30,6 +30,11 @@ namespace RisagerManagerServer.Controllers
             if (userId == null) { return null; }
             return await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(userId));
         }
+        [HttpGet(nameof(GetAllUser))]
+        public async Task<IEnumerable<User>> GetAllUser()
+        {
+            return await _context.Users.ToListAsync();
+        }
         [HttpPost(nameof(SetUsername))]
         public async Task SetUsername(string email, string newUsername)
         {

@@ -6,3 +6,20 @@
 .menu-button {
   margin-right: 1em;
 }
+
+.user {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 1em;
+  gap: 1em;
+  background-color: #1976df;
+}
+.divider {
+  margin: 1em;
+  border-radius: 50px;
+  background-color: #0a244d;
+  width: 3px;
+  height: 70%;
+
+}

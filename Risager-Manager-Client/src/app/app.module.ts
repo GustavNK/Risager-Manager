@@ -22,6 +22,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HomeComponent } from './pages/home/home.component';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
   declarations: [
@@ -48,6 +49,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatTableModule,
     MatInputModule,
     MatIconModule,
+    MatCardModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'da-DK' },
