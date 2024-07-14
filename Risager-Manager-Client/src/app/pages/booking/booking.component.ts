@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { BookingService } from './services/booking.service';
-import { Booking } from 'src/app/services/ApiClient';
+import { Booking, User } from 'src/app/services/ApiClient';
 import { Observable } from 'rxjs';
+import { AuthenticationService } from 'src/app/shared/services/authentication/authentication.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-booking',
@@ -16,8 +18,14 @@ export class BookingComponent {
   }>;
   currentBookings: Booking[] = [];
   currentBookings$: Observable<Booking[]>;
+  currentUser$: Observable<User>;
+  currentUser: User | undefined;
 
-  public constructor(private bookingService: BookingService) {
+  public constructor(
+    private bookingService: BookingService,
+    private authenticationService: AuthenticationService,
+    private snackBar: MatSnackBar
+  ) {
     const dayInMilliseconds = 1000 * 60 * 60 * 24;
     this.range = new FormGroup({
       start: new FormControl<Date | null>(new Date(Date())),
@@ -27,10 +35,14 @@ export class BookingComponent {
     });
 
     this.currentBookings$ = this.bookingService.getCurrentBookings();
+    this.currentUser$ = this.authenticationService.currentUser();
   }
   ngOnInit() {
     this.currentBookings$.subscribe((dates) => {
       this.currentBookings = dates;
+    });
+    this.currentUser$.subscribe((x) => {
+      this.currentUser = x;
     });
   }
 
@@ -47,19 +59,45 @@ export class BookingComponent {
     if (!this.range.value.start || !this.range.value.end) return;
     this.bookingService
       .createNewBooking(this.range.value.start, this.range.value.end, 1)
-      .subscribe((result) => {
-        if (!result) {
-          console.error('Booking failed');
-        }
-        console.log(
-          'Booking successful',
-          this.range.value.start,
-          this.range.value.end
-        );
-        this.currentBookings$ = this.bookingService.getCurrentBookings();
-        this.currentBookings$.subscribe(
-          (dates) => (this.currentBookings = dates)
-        );
+      .subscribe({
+        next: () => {
+          console.log(
+            'Booking successful',
+            this.range.value.start,
+            this.range.value.end
+          );
+          this.openSnackBar('Booking was succesfull!', 'close');
+
+          this.currentBookings$ = this.bookingService.getCurrentBookings();
+          this.currentBookings$.subscribe(
+            (dates) => (this.currentBookings = dates)
+          );
+        },
+        error: () => {
+          this.openSnackBar('Booking failed', 'close');
+        },
+        complete: () => {},
       });
+  }
+
+  delteBooking(booking: Booking | undefined): void {
+    // this.bookingService.deleteBooking(booking.id).subscribe({
+    //   next: () => {
+    //     console.log('Booking deleted', booking);
+    //     this.openSnackBar('Booking was deleted!', 'close');
+    //     this.currentBookings$ = this.bookingService.getCurrentBookings();
+    //     this.currentBookings$.subscribe(
+    //       (dates) => (this.currentBookings = dates)
+    //     );
+    //   },
+    //   error: () => {
+    //     this.openSnackBar('Booking deletion failed', 'close');
+    //   },
+    //   complete: () => {},
+    // });
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action);
   }
 }

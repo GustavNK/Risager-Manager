@@ -1,0 +1,34 @@
+<form class="content">
+  <mat-form-field>
+    <mat-label>Username</mat-label>
+    <input
+      matInput
+      placeholder="Username"
+      [formControl]="registerFormGroup.controls.username"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input
+      matInput
+      placeholder="Email"
+      [formControl]="registerFormGroup.controls.email"
+    />
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Password</mat-label>
+    <input
+      matInput
+      placeholder="Password"
+      [formControl]="registerFormGroup.controls.password"
+    />
+  </mat-form-field>
+  <button
+    style="width: 8em"
+    mat-raised-button
+    color="primary"
+    (click)="submit()"
+  >
+    Login
+  </button>
+</form>

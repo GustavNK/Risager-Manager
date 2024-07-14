@@ -27,4 +27,8 @@ export class BookingService {
       userId
     );
   }
+
+  deleteBooking(bookingId: string): Observable<any> {
+    return this.client.bookingDELETE(bookingId);
+  }
 }

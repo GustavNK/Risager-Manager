@@ -16,8 +16,21 @@ import { BookingComponent } from './pages/booking/booking.component';
 import { UserComponent } from './pages/user/user.component';
 import { API_BASE_URL, ApiClient } from './services/ApiClient';
 import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { RegisterUserComponent } from './pages/register-user/register-user.component';
+import { CookieService } from 'ngx-cookie-service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { HomeComponent } from './pages/home/home.component';
+import { MatIconModule } from '@angular/material/icon';
+
 @NgModule({
-  declarations: [AppComponent, BookingComponent, UserComponent],
+  declarations: [
+    AppComponent,
+    BookingComponent,
+    UserComponent,
+    RegisterUserComponent,
+    HomeComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -33,6 +46,8 @@ import { MatTableModule } from '@angular/material/table';
     MatNativeDateModule,
     BrowserAnimationsModule,
     MatTableModule,
+    MatInputModule,
+    MatIconModule,
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'da-DK' },
@@ -41,6 +56,8 @@ import { MatTableModule } from '@angular/material/table';
       useClass: ApiClient,
     },
     { provide: API_BASE_URL, useValue: 'https://localhost:7185' },
+    CookieService,
+    MatSnackBar,
   ],
   bootstrap: [AppComponent],
 })

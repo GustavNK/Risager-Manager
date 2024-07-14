@@ -39,6 +39,7 @@ export class ApiClient {
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Accept": "text/plain"
             })
@@ -89,6 +90,7 @@ export class ApiClient {
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Accept": "text/plain"
             })
@@ -154,6 +156,7 @@ export class ApiClient {
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Accept": "text/plain"
             })
@@ -195,6 +198,59 @@ export class ApiClient {
     }
 
     /**
+     * @param id (optional) 
+     * @return OK
+     */
+    bookingDELETE(id: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/Booking?";
+        if (id === null)
+            throw new Error("The parameter 'id' cannot be null.");
+        else if (id !== undefined)
+            url_ += "id=" + encodeURIComponent("" + id) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("delete", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processBookingDELETE(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processBookingDELETE(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processBookingDELETE(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
      * @return OK
      */
     register(body: RegisterRequest): Observable<void> {
@@ -207,6 +263,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
             })
@@ -274,6 +331,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
                 "Accept": "application/json"
@@ -328,6 +386,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
                 "Accept": "application/json"
@@ -392,6 +451,7 @@ export class ApiClient {
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
             })
         };
@@ -442,6 +502,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
             })
@@ -493,6 +554,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
             })
@@ -550,6 +612,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
             })
@@ -607,6 +670,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
                 "Accept": "application/json"
@@ -668,6 +732,7 @@ export class ApiClient {
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Accept": "application/json"
             })
@@ -731,6 +796,7 @@ export class ApiClient {
             body: content_,
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Content-Type": "application/json",
                 "Accept": "application/json"
@@ -797,6 +863,7 @@ export class ApiClient {
         let options_ : any = {
             observe: "response",
             responseType: "blob",
+            withCredentials: true,
             headers: new HttpHeaders({
                 "Accept": "text/plain"
             })
@@ -828,6 +895,163 @@ export class ApiClient {
             let result200: any = null;
             result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as User;
             return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    getCurrentUser(): Observable<User> {
+        let url_ = this.baseUrl + "/api/User/GetCurrentUser";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processGetCurrentUser(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processGetCurrentUser(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<User>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<User>;
+        }));
+    }
+
+    protected processGetCurrentUser(response: HttpResponseBase): Observable<User> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            result200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver) as User;
+            return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param email (optional) 
+     * @param newUsername (optional) 
+     * @return OK
+     */
+    setUsername(email: string | undefined, newUsername: string | undefined): Observable<void> {
+        let url_ = this.baseUrl + "/api/User/SetUsername?";
+        if (email === null)
+            throw new Error("The parameter 'email' cannot be null.");
+        else if (email !== undefined)
+            url_ += "email=" + encodeURIComponent("" + email) + "&";
+        if (newUsername === null)
+            throw new Error("The parameter 'newUsername' cannot be null.");
+        else if (newUsername !== undefined)
+            url_ += "newUsername=" + encodeURIComponent("" + newUsername) + "&";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processSetUsername(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processSetUsername(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processSetUsername(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @return OK
+     */
+    logout(): Observable<void> {
+        let url_ = this.baseUrl + "/api/User/Logout";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_ : any = {
+            observe: "response",
+            responseType: "blob",
+            withCredentials: true,
+            headers: new HttpHeaders({
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_ : any) => {
+            return this.processLogout(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processLogout(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<void>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<void>;
+        }));
+    }
+
+    protected processLogout(response: HttpResponseBase): Observable<void> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return _observableOf(null as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
