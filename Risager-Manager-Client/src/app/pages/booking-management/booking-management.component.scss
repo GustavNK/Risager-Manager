@@ -1,3 +1,9 @@
 .mat-mdc-row:hover .mat-mdc-cell {
   background-color: #efefef;
 }
+
+.form {
+  display: flex;
+  flex-direction: row;
+  gap: 1em
+}

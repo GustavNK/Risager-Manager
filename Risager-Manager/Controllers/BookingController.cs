@@ -28,7 +28,7 @@ namespace RisagerManagerServer.Controllers
         [HttpGet("{id}")]
         public async Task<Booking?> GetBookingById(int id)
         {
-            return await _context.Booking.FirstOrDefaultAsync(x => x.Id.Equals(id));
+            return await _context.Booking.Include(x => x.House).FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
 
         [HttpGet()]

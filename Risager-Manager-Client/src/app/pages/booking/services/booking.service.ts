@@ -15,6 +15,10 @@ export class BookingService {
     return this.client.bookingAll();
   }
 
+  getBookingById(bookingId: string): Observable<Booking> {
+    return this.client.bookingGET(parseInt(bookingId));
+  }
+
   createNewBooking(
     start: Date,
     end: Date,

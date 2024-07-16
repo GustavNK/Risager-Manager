@@ -13,19 +13,21 @@ import { HouseService } from 'src/app/shared/services/house/house.service';
   styleUrls: ['./booking.component.css'],
 })
 export class BookingComponent {
+  bookingTableColumns = ['start', 'end', 'user', 'house', 'delete'];
   range: FormGroup<{
     start: FormControl<Date | null>;
     end: FormControl<Date | null>;
     house: FormControl<House | null>;
   }>;
-  currentBookings: Booking[] = [];
   currentBookings$: Observable<Booking[]>;
+  currentBookings: Booking[] = [];
+  currentlyShownBookings: Booking[] = [];
   currentUser$: Observable<User>;
   currentUser: User | undefined;
   houseList$: Observable<House[]>;
   houseList: House[] = [];
   housePicture: string | undefined = undefined;
-
+  currentlySelectedHouse: House | undefined = undefined;
   public constructor(
     private bookingService: BookingService,
     private authenticationService: AuthenticationService,
@@ -50,6 +52,9 @@ export class BookingComponent {
         console.log(x.house);
         this.housePicture = x.house.imageSrc;
       }
+      this.currentlyShownBookings = this.currentBookings.filter(
+        (x) => x.house.id === this.range.value.house?.id
+      );
     });
   }
 
@@ -57,6 +62,10 @@ export class BookingComponent {
     this.currentBookings$.subscribe((dates) => {
       console.log(dates);
       this.currentBookings = dates;
+      this.currentlyShownBookings = this.currentBookings.filter((x) => {
+        if (!this.range.value.house) return true;
+        return x.house.id === this.range.value.house?.id;
+      });
     });
     this.currentUser$.subscribe((x) => {
       this.currentUser = x;
@@ -64,6 +73,9 @@ export class BookingComponent {
     this.houseList$.subscribe((x) => {
       this.houseList = x;
       this.range.controls.house.setValue(x[0]);
+      this.currentlyShownBookings = this.currentBookings.filter(
+        (x) => x.house.id === this.range.value.house?.id
+      );
     });
   }
 
@@ -94,9 +106,12 @@ export class BookingComponent {
           this.openSnackBar('Booking was succesfull!', 'close');
 
           this.currentBookings$ = this.bookingService.getCurrentBookings();
-          this.currentBookings$.subscribe(
-            (dates) => (this.currentBookings = dates)
-          );
+          this.currentBookings$.subscribe((dates) => {
+            this.currentBookings = dates;
+            this.currentlyShownBookings = this.currentBookings.filter(
+              (x) => x.house.id === this.range.value.house?.id
+            );
+          });
         },
         error: () => {
           this.openSnackBar('Booking failed', 'close');
@@ -115,9 +130,12 @@ export class BookingComponent {
         console.log('Booking deleted', bookingId);
         this.openSnackBar('Booking was deleted!', 'close');
         this.currentBookings$ = this.bookingService.getCurrentBookings();
-        this.currentBookings$.subscribe(
-          (dates) => (this.currentBookings = dates)
-        );
+        this.currentBookings$.subscribe((dates) => {
+          this.currentBookings = dates;
+          this.currentlyShownBookings = this.currentBookings.filter(
+            (x) => x.house.id === this.range.value.house?.id
+          );
+        });
       },
       error: () => {
         this.openSnackBar('Booking deletion failed', 'close');

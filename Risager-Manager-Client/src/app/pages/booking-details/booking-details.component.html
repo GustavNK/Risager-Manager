@@ -1,0 +1,30 @@
+<div *ngIf="booking">
+  <h1>Your booking at {{ booking.house.name }}</h1>
+  <p>
+    At {{ booking.arrival }} you arrive and at {{ booking.departure }} you
+    leave.
+  </p>
+  <h2>Stay details</h2>
+  <form class="form" [formGroup]="bookingDetails">
+    <mat-form-field>
+      <mat-label>Electrical Meter Start</mat-label>
+      <input matInput type="number" formControlName="electricityMeterStart" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Electrical Meter Start</mat-label>
+      <input matInput type="number" formControlName="electricityMeterEnd" />
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Comments</mat-label>
+      <textarea
+        style="height: 8em"
+        matInput
+        formControlName="comment"
+      ></textarea>
+    </mat-form-field>
+
+    <button style="width: 4em" mat-raised-button color="primary">Save</button>
+  </form>
+</div>

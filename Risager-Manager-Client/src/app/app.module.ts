@@ -25,6 +25,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatSelectModule } from '@angular/material/select';
 import { BookingManagementComponent } from './pages/booking-management/booking-management.component';
+import { BookingDetailsComponent } from './pages/booking-details/booking-details.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { BookingManagementComponent } from './pages/booking-management/booking-m
     UserManagementComponent,
     HomeComponent,
     BookingManagementComponent,
+    BookingDetailsComponent,
   ],
   imports: [
     BrowserModule,

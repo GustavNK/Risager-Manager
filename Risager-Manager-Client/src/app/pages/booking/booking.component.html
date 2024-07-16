@@ -4,7 +4,7 @@
   <form class="booking-form" [formGroup]="range">
     <mat-form-field>
       <mat-label>Select house</mat-label>
-      <mat-select [formControl]="range.controls.house">
+      <mat-select formControlName="house">
         <mat-option *ngFor="let house of houseList" [value]="house">{{
           house.name
         }}</mat-option>
@@ -41,7 +41,11 @@
   </button>
 </div>
 
-<table mat-table [dataSource]="this.currentBookings" class="mat-elevation-z8">
+<table
+  mat-table
+  [dataSource]="this.currentlyShownBookings"
+  class="mat-elevation-z8"
+>
   <ng-container matColumnDef="start">
     <th mat-header-cell *matHeaderCellDef>Arrival</th>
     <td mat-cell *matCellDef="let element">{{ element.arrival }}</td>
@@ -79,12 +83,6 @@
     </td>
   </ng-container>
 
-  <tr
-    mat-header-row
-    *matHeaderRowDef="['start', 'end', 'user', 'house', 'delete']"
-  ></tr>
-  <tr
-    mat-row
-    *matRowDef="let row; columns: ['start', 'end', 'user', 'house', 'delete']"
-  ></tr>
+  <tr mat-header-row *matHeaderRowDef="bookingTableColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: bookingTableColumns"></tr>
 </table>
