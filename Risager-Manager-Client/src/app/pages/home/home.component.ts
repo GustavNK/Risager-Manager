@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { SimpleDialogComponent } from 'src/app/shared/components/simple-dialog/simple-dialog.component';
 
 @Component({
   selector: 'app-home',
@@ -8,11 +7,7 @@ import { SimpleDialogComponent } from 'src/app/shared/components/simple-dialog/s
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent {
-  constructor(private dialog: MatDialog) {}
-
-  openDialog() {
-    this.dialog.open(SimpleDialogComponent);
-  }
+  constructor() {}
 
   houseList = [
     {
