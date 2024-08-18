@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RisagerManagerServer.Models;
@@ -16,12 +17,13 @@ public class UserController : Controller
         _context = context;
         _userManager = userManager;
     }
-
+    [Authorize]
     [HttpGet(nameof(GetUser))]
     public async Task<User?> GetUser(string id)
     {
         return await _context.User.FirstOrDefaultAsync(x => x.Id.Equals(id));
     }
+    [Authorize]
     [HttpGet(nameof(GetCurrentUser))]
     public async Task<User?> GetCurrentUser()
     {
@@ -29,11 +31,13 @@ public class UserController : Controller
         if (userId == null) { return null; }
         return await _context.Users.FirstOrDefaultAsync(x => x.Id.Equals(userId));
     }
+    [Authorize]
     [HttpGet(nameof(GetAllUser))]
     public async Task<IEnumerable<User>> GetAllUser()
     {
         return await _context.Users.ToListAsync();
     }
+    [Authorize]
     [HttpPost(nameof(SetUsername))]
     public async Task SetUsername(string email, string newUsername)
     {
@@ -42,12 +46,13 @@ public class UserController : Controller
         contextUser.UserName = newUsername;
         _context.SaveChanges();
     }
-        
+    [Authorize]
     [HttpPost(nameof(Logout))]
     public async Task Logout()
     {
         this.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions { Secure = true });
     }
+    [Authorize]
     [HttpDelete(nameof(DeleteUser))]
     public async Task DeleteUser(string userId)
     {
@@ -55,5 +60,12 @@ public class UserController : Controller
         _context.User.Remove(userToDelte);
         _context.SaveChanges();
     }
+    [AllowAnonymous]
+    [HttpGet(nameof(IsAuthenticated))]
+    public bool IsAuthenticated()
+    {
+        return User.Identity.IsAuthenticated;
+    }
+
 }
 

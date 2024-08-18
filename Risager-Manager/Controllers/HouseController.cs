@@ -7,7 +7,6 @@ namespace RisagerManagerServer.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class HouseController : ControllerBase
     {
         private readonly RisagerContext _context;

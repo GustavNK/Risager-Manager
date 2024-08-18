@@ -30,7 +30,7 @@ namespace RisagerManagerServer.Controllers
         {
             return await _context.Booking.Include(x => x.House).FirstOrDefaultAsync(x => x.Id.Equals(id));
         }
-
+        [AllowAnonymous]
         [HttpGet()]
         public async Task<IEnumerable<Booking>> GetAllBookings()
         {

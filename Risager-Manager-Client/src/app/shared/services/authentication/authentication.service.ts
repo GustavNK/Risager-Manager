@@ -52,4 +52,8 @@ export class AuthenticationService {
   deleteUser(userId: string) {
     return this.client.deleteUser(userId);
   }
+
+  isAuthenticated(): Observable<boolean> {
+    return this.client.isAuthenticated();
+  }
 }
